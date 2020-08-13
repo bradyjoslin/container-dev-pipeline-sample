@@ -127,6 +127,6 @@ Hello world!
 
 ...under a new run of the Action under `CI/CD Automation` in `Automation step 1`.
 
-![action output](./images/action-output.png)
+![action output](./images/pipeline-output.png)
 
 🎉
