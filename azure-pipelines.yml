@@ -1,0 +1,36 @@
+trigger:
+  - master
+
+jobs:
+  - job: BuildandPublishContainer
+    displayName: Build and publish container
+
+    pool:
+      vmImage: "ubuntu-latest"
+
+    steps:
+      - task: Docker@2
+        inputs:
+          containerRegistry: "PocAcr"
+          repository: "poc/dev"
+          command: "buildAndPush"
+          Dockerfile: "**/Dockerfile"
+          tags: |
+            $(Build.BuildNumber)
+            latest
+
+  - job: RunInContainer
+    displayName: Run in container
+    dependsOn: BuildandPublishContainer
+
+    pool:
+      vmImage: "ubuntu-latest"
+
+    container:
+      image: bradyjoslinmyacr.azurecr.io/poc/dev:latest
+      endpoint: "PocAcr"
+
+    steps:
+      - task: Bash@3
+        inputs:
+          filePath: "./docker/entrypoint.sh"
