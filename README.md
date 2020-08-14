@@ -2,13 +2,13 @@
 
 An example for how to share a single Dockerfile defined in a repository for both local development using VS Code dev containers and CI/CD with Azure Pipelines.
 
+> **Note:** While the sample code for this project is in GitHub, this example would work the same were the repository located in an Azure DevOps Repo.  If you'd like to configure a similar setup using GitHub Actions instead of Azure Pipelines see this [sample](https://github.com/bradyjoslin/container-dev-action-sample).
+
 ## VS Code Devcontainers
 
-Dev containers provide a way to develop locally inside of a container whose definition is specified within the source code for your project, including any required dev dependencies and configurations.  This is a great way to create a shared, reproducible development environment for those working on a project.  This accelerates developer onboarding by removing the need for team members to install and configure dev dependencies for a project.  From the docs:
+Dev containers provide a way to develop locally inside of a container whose definition is specified within the source code for your project, including any required dev dependencies and configurations.  This is a great way to create a shared, reproducible development environment, helping to accelerate onboarding and ensure consistent results.  From the docs:
 
 > The Visual Studio Code Remote - Containers extension lets you use a Docker container as a full-featured development environment. It allows you to open any folder inside (or mounted into) a container and take advantage of Visual Studio Code's full feature set. A devcontainer.json file in your project tells VS Code how to access (or create) a development container with a well-defined tool and runtime stack. This container can be used to run an application or to sandbox tools, libraries, or runtimes needed for working with a codebase. ([more](https://code.visualstudio.com/docs/remote/containers))
-
-**Note:** while the sample code for this project is in GitHub, this example would work the same were the repository located in an Azure DevOps Repo.
 
 ## Azure Pipeline Container Jobs
 
