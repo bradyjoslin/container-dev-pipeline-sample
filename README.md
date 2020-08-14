@@ -148,6 +148,10 @@ Hello world!
 
 ...by clicking the link to see the details of the Pipeline run in Azure DevOps from the PR page.
 
-![action output](./images/pipeline-output.png)
+![pr](./images/pr.png)
+
+...and clicking `View more details on Azure Pipelines`, then `Run in Container`, then the Bash step.
+
+![pipeline output](./images/pipeline-output.png)
 
 🎉
