@@ -69,15 +69,18 @@ This npm script runs `rg -i world! --iglob \*.html | awk 'NR==1' | cut -d ':' -f
 
 ### Using Azure Pipeline
 
-The Pipeline definition is set to run on pushes to any branch and defines two jobs.  
+In this example, the Pipeline definition is set to run on pushes the master branch or for pull requests, and pull request are set to require a comment by a maintainer before triggering in the Azure Pipeline configuration (in the UI).  
 
 ```yaml
 trigger:
   - master
+  
+pr:
+  - master
 ...
 ```
 
-The first job builds and publishes a container based on the Dockerfile in the repo to an [Azure Container Registry] instance defined as a [Service Connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps named `PocAcr`.
+The first job builds and publishes a container based on the Dockerfile in the repo to an [Azure Container Registry](https://azure.microsoft.com/en-us/services/container-registry/) instance defined as a [Service Connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) for the Azure DevOps project named `PocAcr`.
 
 ```yaml
 ...
@@ -153,5 +156,7 @@ Hello world!
 ...and clicking `View more details on Azure Pipelines`, then `Run in Container`, then the Bash step.
 
 ![pipeline output](./images/pipeline-output.png)
+
+In a real-life scenario you may want to separate these jobs to different Pipelines, only building and publishing your container when updates to the Dockerfile are made, but both were combined here for simplicity.
 
 🎉
