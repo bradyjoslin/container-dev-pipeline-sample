@@ -75,7 +75,7 @@ trigger:
 ...
 ```
 
-The first job builds and publishes a container based on the Dockerfile in the repo to an [Azure Container Registry] instance defined as a Service Connection in Azure DevOps named `PocAcr`.
+The first job builds and publishes a container based on the Dockerfile in the repo to an [Azure Container Registry] instance defined as a [Service Connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps named `PocAcr`.
 
 ```yaml
 ...
