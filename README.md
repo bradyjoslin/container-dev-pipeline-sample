@@ -67,53 +67,76 @@ This npm script runs `rg -i world! --iglob \*.html | awk 'NR==1' | cut -d ':' -f
 
 ### Using Azure Pipeline
 
-**TODO KEEP Editing below**
-
-The Pipeline definition is set to run on pushes to any branch.  The first defined step checks out our code into an automation step whose `uses` property points to the location of `.github/action.yml` which is the location for our Action configuration file.
+The Pipeline definition is set to run on pushes to any branch and defines two jobs.  
 
 ```yaml
-# .github/workflows/main.yml
-on: [push, pull_request]
+trigger:
+  - master
+...
+```
 
+The first job builds and publishes a container based on the Dockerfile in the repo to an [Azure Container Registry] instance defined as a Service Connection in Azure DevOps named `PocAcr`.
+
+```yaml
+...
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    name: CI/CD Automation
+  - job: BuildandPublishContainer
+    displayName: Build and publish container
+
+    pool:
+      vmImage: "ubuntu-latest"
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Automation step 1
-        uses: ./.github/
+      - task: Docker@2
+        inputs:
+          containerRegistry: "PocAcr"
+          repository: "poc/dev"
+          command: "buildAndPush"
+          Dockerfile: "**/Dockerfile"
+          tags: |
+            $(Build.BuildNumber)
+            latest
+...
 ```
 
-Note that `ripgrep` is not installed by the [ubuntu-latest GitHub runner](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) we are using in this workflow, so in order for our example script to work we need it to run in our defined container.
-
-`action.yml` then points to the location of our Dockerfile
+The second job is an Azure Container Job which pulls and runs the container published to the container registry in the previous step, running the entrypoint bash script within the container instance.
 
 ```yaml
-# .github/action.yml
-name: "Hello action"
-description: "Sharing actions with devcontainers"
-runs:
-  using: "docker"
-  image: "../docker/Dockerfile"
+...
+  - job: RunInContainer
+    displayName: Run in container
+    dependsOn: BuildandPublishContainer
+
+    pool:
+      vmImage: "ubuntu-latest"
+
+    container:
+      image: bradyjoslinmyacr.azurecr.io/poc/dev:latest
+      endpoint: "PocAcr"
+
+    steps:
+      - task: Bash@3
+        inputs:
+          filePath: "./docker/entrypoint.sh"
 ```
 
-Our Dockerfile has a configured `ENTRYPOINT ["/entrypoint.sh"]` which executes when the container is created, which is a bash script that executes the two npm commands we ran locally earlier.  There is an additional check to see if the environment variable `GITHUB_ACTIONS` is set, which would only exist in the context of running as a GitHub Action, not locally.
+`entrypoint.sh` executes the two npm scripts we manual ran from within the devcontainer in VS Code earlier.
 
-```bash
+```yml
 #!/bin/bash
 
 set -e
 
-# Check if running in GitHub vs locally
-if [ -n "$GITHUB_ACTIONS" ]
-then
-  echo "** Running github action script **"
-  npm run hello:rg --silent
-  npm run hello:cat --silent
-  echo "** **"
-fi
+echo "** Running Azure Pipeline script **"
+npm run hello:rg --silent
+npm run hello:cat --silent
+echo "** **"
 ```
+
+Note that `ripgrep` is not installed by the [ubuntu-latest hosted agent](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) we are using in this Pipeline, so in order for our example script to work we need it to run in our defined container.
+
+
+### TODO make the azure devops pipeline public
 
 To see the Action run, simply fork and provide a PR to this repo with an innocuous change to this `README.md` file.  When the action is finished running you should see...
 
