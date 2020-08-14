@@ -137,7 +137,7 @@ echo "** **"
 
 Note that `ripgrep` is not installed by the [ubuntu-latest hosted agent](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) we are using in this Pipeline, so in order for our example script to work we need it to run in our defined container.
 
-To see the Pipeline run, simply fork and provide a PR to this repo with an innocuous change to this `README.md` file.  After I fire initite the Pipeline using a comment trigger, when the Pipeline is finished running you should see...
+To see the Pipeline run, simply fork and provide a PR to this repo with an innocuous change to this `README.md` file.  After I initiate the Pipeline using a comment trigger, when the Pipeline is finished running you should see...
 
 ```text
 ** Running Azure Pipeline script **
