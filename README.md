@@ -8,6 +8,8 @@ Dev containers provide a way to develop locally inside of a container whose defi
 
 > The Visual Studio Code Remote - Containers extension lets you use a Docker container as a full-featured development environment. It allows you to open any folder inside (or mounted into) a container and take advantage of Visual Studio Code's full feature set. A devcontainer.json file in your project tells VS Code how to access (or create) a development container with a well-defined tool and runtime stack. This container can be used to run an application or to sandbox tools, libraries, or runtimes needed for working with a codebase. ([more](https://code.visualstudio.com/docs/remote/containers))
 
+**Note:** while the sample code for this project is in GitHub, this example would work the same were the repository located in an Azure DevOps Repo.
+
 ## Azure Pipeline Container Jobs
 
 [Azure Pipeline Container Jobs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops) allow you to build and deploy your application from within a defined container instead of simply on the host the Pipeline agent is running on.  These provide a fantastic way to provide a consistent build environment that includes any needed dependencies and configurations for CI/CD or other types of automation.
@@ -135,10 +137,7 @@ echo "** **"
 
 Note that `ripgrep` is not installed by the [ubuntu-latest hosted agent](https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md) we are using in this Pipeline, so in order for our example script to work we need it to run in our defined container.
 
-
-### TODO make the azure devops pipeline public
-
-To see the Action run, simply fork and provide a PR to this repo with an innocuous change to this `README.md` file.  When the action is finished running you should see...
+To see the Pipeline run, simply fork and provide a PR to this repo with an innocuous change to this `README.md` file.  When the action is finished running you should see...
 
 ```text
 ** Running github action script **
